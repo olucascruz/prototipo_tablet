@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itens pedido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding-left: 40px;
+            background-color: #f4f4f4;
+        }
+        .conferir-bt {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+        .no{
+            background-color: #f44336; /* Red */
+           
+        }
+        .content{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        table{
+            background-color: rgb(255, 255, 255);
+            width: 100%;
+        }
+        tr{
+            text-align: center;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ccc; /* só a linha de baixo */
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+        .modal-content {
+            background-color: #666666;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            width: 80%;
+            max-width: 400px;
+            justify-content: end;
+        }
+        .modal-content h3{
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .modal-content button {
+            align-self: flex-end;
+            padding: 10px 20px;
+
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .row button.send {
+            background-color: #36f46f;
+        }
+        .row button.close {
+            background-color: #f44336;
+        }
+
+        input[type="text"] {
+            width: 60px;
+            height: 100%;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .suggestion {
+            background-color: #008CBA; /* Blue */
+            margin-bottom: 10px;
+        }
+
+        .select-setor {
+            background-color: #008CBA; /* Blue */
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 20%;
+            height: 50px;
+        }
+
+        .select-setor.actived:hover {
+            background-color: #005f73; /* Darker Blue */
+        }
+
+        .select-setor.actived {
+            background-color: #4CAF50; /* Green */
+        }
+    </style>
+</head>
+<body>
+    
+    <h3>Separação de produtos</h3>
+
+    <div class="row">
+        <button class="select-setor ">BEBIDAS</button>
+        <button class="select-setor">GRÃOS</button>
+        <button class="select-setor">ENLATADOS</button>
+        <button class="select-setor actived">FRIOS</button>
+
+    </div>
+    <div class="content">
+        <table>
+            <tr>
+                <th>PRODUTO</th>
+                <th>U.M</th>
+                <th>QTD</th>
+                <th>QTD NOVA</th>
+                <th>CONFERIR</th>    
+            </tr>
+        </table>
+        <br>
+
+        <div class="modal" id="myModal">
+            <div class="modal-content">
+                <h3>Observação</h3>
+                <button class="suggestion">Sem produto em estoque</button>
+                <textarea name="obs" id="obs"></textarea>
+                <br>
+                <div class="row">
+                    <button id="close-bt" class="close">Cancelar</button>
+                    <button id="send-obs" class="send">Enviar</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        const mockProdutos = [
+            { produto: "CAMARAO 32KG", um: "KG", qntd: 4 },
+            { produto: "CAMARAO 61/70 PUD", um: "KG", qntd: 4 },
+            { produto: "CAMARAO 32KG", um: "KG", qntd: 4 },
+        ];
+        const tableBody = document.querySelector("table tbody");
+
+        mockProdutos.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${item.produto}</td>
+                <td>${item.um}</td>
+                <td>${item.qntd}</td>
+                <td><input type="text"></td>
+                <td> 
+                    <div>
+                        <button class="conferir-bt">SIM</button> 
+                        <button class="conferir-bt no" id="button-no">NÃO</button>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+        
+        const modal = document.getElementById("myModal");
+        const closeBtn = document.getElementById("close-bt");
+
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.id === 'button-no') {
+                modal.style.display = "flex";        
+            }
+
+        });
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+
+        document.querySelector(".suggestion").addEventListener("click", function() {
+            document.getElementById("obs").value = "Sem produto em estoque";
+        });
+
+    </script>
+</body>
+</html>
