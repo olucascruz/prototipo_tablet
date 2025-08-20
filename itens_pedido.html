@@ -8,7 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            padding-left: 40px;
+            padding-left: 30px;
             background-color: #f4f4f4;
         }
         .conferir-bt {
@@ -40,13 +40,17 @@
         }
         tr{
             text-align: center;
+
         }
         th, td {
+            height: 80px;
             padding: 8px;
             border-bottom: 1px solid #ccc; /* só a linha de baixo */
         }
 
         .modal {
+            padding: 15px;
+            border-radius: 5px;
             display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
@@ -58,19 +62,23 @@
             width: 100%; /* Full width */
             height: 100%; /* Full height */
             overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            background-color: rgba(41, 41, 41, 0.4); /* Black w/ opacity */
         }
         textarea {
             width: 100%;
             height: 200px;
+            border-radius: 15px;
+            padding-left: 10px;
+            padding-top: 10px;
+
+
         }
         .modal-content {
             background-color: #666666;
             display: flex;
             flex-direction: column;
             padding: 20px;
-            width: 80%;
+            width: 90%;
             max-width: 400px;
             justify-content: end;
         }
@@ -81,29 +89,35 @@
 
         .modal-content button {
             align-self: flex-end;
-            padding: 10px 20px;
-
+            width: 200px;
+            height: 40px;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
+        
+        .row button.send {
+            background-color: #60ca80;
+            width: 20%;
+            text-align: center;
 
+        }
+        .row button.close {
+            background-color: #f44336;
+            width: 20%;
+            text-align: center;
+
+        }
         .row {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
         }
-        .row button.send {
-            background-color: #36f46f;
-        }
-        .row button.close {
-            background-color: #f44336;
-        }
 
-        input[type="text"] {
+        input[type="number"] {
             width: 60px;
-            height: 100%;
+            height: 40%;
             padding: 5px;
             text-align: center;
         }
@@ -132,6 +146,13 @@
         .select-setor.actived {
             background-color: #4CAF50; /* Green */
         }
+
+        .div-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -139,11 +160,10 @@
     <h3>Separação de produtos</h3>
 
     <div class="row">
-        <button class="select-setor ">BEBIDAS</button>
+        <button class="select-setor">BEBIDAS</button>
         <button class="select-setor">GRÃOS</button>
         <button class="select-setor">ENLATADOS</button>
         <button class="select-setor actived">FRIOS</button>
-
     </div>
     <div class="content">
         <table>
@@ -151,12 +171,14 @@
                 <th>PRODUTO</th>
                 <th>U.M</th>
                 <th>QTD</th>
-                <th>QTD NOVA</th>
+                <th>QTD DISPONIVEL</th>
                 <th>CONFERIR</th>    
             </tr>
         </table>
         <br>
 
+    </div>
+    
         <div class="modal" id="myModal">
             <div class="modal-content">
                 <h3>Observação</h3>
@@ -171,7 +193,6 @@
             </div>
 
         </div>
-    </div>
     <script>
         const mockProdutos = [
             { produto: "CAMARAO 32KG", um: "KG", qntd: 4 },
@@ -179,36 +200,65 @@
             { produto: "CAMARAO 32KG", um: "KG", qntd: 4 },
         ];
         const tableBody = document.querySelector("table tbody");
+        document.querySelectorAll(".select-setor").forEach(button => {
+            button.addEventListener("click", event => {
+                console.log("Setor selecionado");
 
+                // Remove a classe de todos
+                document.querySelectorAll(".select-setor").forEach(btn => {
+                    btn.classList.remove("actived");
+                });
+
+                // Adiciona apenas no clicado
+                event.currentTarget.classList.add("actived");
+            });
+        });
+        let counter = 0
         mockProdutos.forEach(item => {
             const row = document.createElement("tr");
+            row.id = `row-${counter}`; // Assign a unique ID to each row for future reference
+            row.attributes
             row.innerHTML = `
-                <td>${item.produto}</td>
+                <td id='produto-${counter}'>${item.produto}</td>
                 <td>${item.um}</td>
-                <td>${item.qntd}</td>
-                <td><input type="text"></td>
+                <td id='qtd-${counter}'>${item.qntd}</td>
+                <td><input type="number" min="0" id='qtd-disponivel-${counter}'></td>
                 <td> 
-                    <div>
-                        <button class="conferir-bt">SIM</button> 
-                        <button class="conferir-bt no" id="button-no">NÃO</button>
+                    <div class="div-buttons">
+                        <button onclick= "yes(${counter})" class="conferir-bt">SIM</button> 
+                        <button onclick = "noProduct(${counter})" class="conferir-bt no" id="button-no">NÃO</button>
                     </div>
                 </td>
             `;
             tableBody.appendChild(row);
+
+            counter++;
         });
         
         const modal = document.getElementById("myModal");
         const closeBtn = document.getElementById("close-bt");
 
-        document.addEventListener('click', function(event) {
-            if (event.target && event.target.id === 'button-no') {
-                modal.style.display = "flex";        
-            }
+       
+        noProduct = (counter) => {
+            const qtdDisponivel = document.getElementById(`qtd-disponivel-${counter}`);
+            qtdDisponivel.value = 0;
+            modal.style.display = "flex";
+        }
 
-        });
+        yes = (counter) => {
+            const qtdDisponivel = document.getElementById(`qtd-disponivel-${counter}`);
+            const qntd = document.getElementById(`qtd-${counter}`);
+            qtdDisponivel.value = qntd.innerHTML;
+            const produto = document.getElementById(`produto-${counter}`);
+            produto.style.borderLeft = "4px solid #60ca80"; // Change border color to green
+        }
 
         closeBtn.onclick = function() {
+            const qtdDisponivel = document.getElementById(`qtd-disponivel-${counter}`);
+            // qtdDisponivel.value = "";
+
             modal.style.display = "none";
+            
         }
 
 
