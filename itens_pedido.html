@@ -10,11 +10,11 @@
             margin: 5%;
             background-color: #f4f4f4;
         }
-        .conferir-bt {
+        .conferir-bt-div .conferir-bt {
             background-color: #4CAF50; /* Green */
             border: none;
-            color: white;
-            padding: 10px 24px;
+            width: 50%;
+            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -22,8 +22,16 @@
             margin: 4px 2px;
             cursor: pointer;
             border-radius: 12px;
+            color: white;
         }
-        .no{
+
+         .conferir-bt-div {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+         }
+        .conferir-bt-div .no{
             background-color: #f44336; /* Red */
            
         }
@@ -138,8 +146,7 @@
             height: 50px;
         }
 
-     
-       
+   
 
         .div-buttons {
             display: flex;
@@ -241,13 +248,13 @@
             mockProdutos.forEach(item => {
                 if (item.sector === sector) {
                     const row = document.createElement("tr");
-                    row.id = `produto-${item.id}`;
+                    row.id = `row-produto-${item.id}`;
                     row.innerHTML = `
-                        <td>${item.produto}</td>
+                        <td id='produto-${item.id}'>${item.produto}</td>
                         <td>${item.um}</td>
                         <td id="qtd-${item.id}">${item.qntd}</td>
                         <td><input type="number" id="qtd-disponivel-${item.id}" min="0" ></td>
-                        <td>
+                        <td class="conferir-bt-div">
                             <button class="conferir-bt no" onclick="noProduct(${item.id})">NÃO</button>
                             <button class="conferir-bt" onclick="yes(${item.id})">SIM</button>
                         </td>
@@ -258,18 +265,12 @@
         }
         selecteSector('bebidas')
         
-        const modal = document.getElementById("myModal");
-        const closeBtn = document.getElementById("close-bt");
-        const sendBtn = document.getElementById("send-bt");
-
-
-       
+ 
         noProduct = (counter) => {
             const qtdDisponivel = document.getElementById(`qtd-disponivel-${counter}`);
             qtdDisponivel.value = 0;
             modal.style.display = "flex";
         }
-
         yes = (counter) => {
             const qtdDisponivel = document.getElementById(`qtd-disponivel-${counter}`);
             const qntd = document.getElementById(`qtd-${counter}`);
@@ -281,14 +282,8 @@
             const produto = document.getElementById(`produto-${counter}`);
             produto.style.borderLeft = "4px solid #60ca80"; // Change border color to green
 
-            console.log(mockProdutos)
-            mockProdutos.find(produto => produto.id === counter).checked = true;
-
-
-            
-            
+            mockProdutos.find(produto => produto.id === counter).checked = true;    
             const selectSetor = document.querySelectorAll(".select-setor")
-            console.log(selectSetor)
             if(selectSetor){
                 selectSetor.forEach(button => {
                 const allChecked = mockProdutos.filter(item => item.sector === button.id).every(item => item.checked);
@@ -303,11 +298,18 @@
             }
             console.log(mockProdutos)
         }
+        
 
+
+        const closeBtn = document.getElementById("close-bt");
+        const sendBtn = document.getElementById("send-bt");
         closeBtn.onclick = function() {
+            const modal = document.getElementById("myModal");
+
             modal.style.display = "none";
         }
         sendBtn.onclick = function() {
+            const modal = document.getElementById("myModal");
             const obs = document.getElementById("obs").value;
             if (obs) {
                 alert(`Observação enviada: ${obs}`);
