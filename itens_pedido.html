@@ -192,7 +192,7 @@
                 <br>
                 <div class="row">
                     <button id="close-bt" class="close">Cancelar</button>
-                    <button id="send-obs" class="send">Enviar</button>
+                    <button id="send-bt" class="send">Enviar</button>
 
                 </div>
             </div>
@@ -260,6 +260,8 @@
         
         const modal = document.getElementById("myModal");
         const closeBtn = document.getElementById("close-bt");
+        const sendBtn = document.getElementById("send-bt");
+
 
        
         noProduct = (counter) => {
@@ -303,11 +305,16 @@
         }
 
         closeBtn.onclick = function() {
-            const qtdDisponivel = document.getElementById(`qtd-disponivel-${counter}`);
-            // qtdDisponivel.value = "";
-
             modal.style.display = "none";
-            
+        }
+        sendBtn.onclick = function() {
+            const obs = document.getElementById("obs").value;
+            if (obs) {
+                alert(`Observação enviada: ${obs}`);
+            } else {
+                alert("Nenhuma observação foi enviada.");
+            }
+            modal.style.display = "none";
         }
 
 
