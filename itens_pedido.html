@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itens pedido</title>
     <style>
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 5%;
@@ -267,16 +276,21 @@
         
  
         noProduct = (counter) => {
+            const modal = document.getElementById("myModal");
             const qtdDisponivel = document.getElementById(`qtd-disponivel-${counter}`);
             qtdDisponivel.value = 0;
             modal.style.display = "flex";
         }
         yes = (counter) => {
+            const modal = document.getElementById("myModal");
+
             const qtdDisponivel = document.getElementById(`qtd-disponivel-${counter}`);
             const qntd = document.getElementById(`qtd-${counter}`);
 
             if (qtdDisponivel.value === "") {
                 qtdDisponivel.value = qntd.innerHTML;
+            }else{
+                modal.style.display = "flex";
             }
             
             const produto = document.getElementById(`produto-${counter}`);
