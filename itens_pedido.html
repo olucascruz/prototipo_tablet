@@ -7,8 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            padding-left: 30px;
+            margin: 5%;
             background-color: #f4f4f4;
         }
         .conferir-bt {
@@ -139,13 +138,8 @@
             height: 50px;
         }
 
-        .select-setor.actived:hover {
-            background-color: #005f73; /* Darker Blue */
-        }
-
-        .select-setor.actived {
-            background-color: #4CAF50; /* Green */
-        }
+     
+       
 
         .div-buttons {
             display: flex;
@@ -153,17 +147,28 @@
             justify-content: center;
             align-items: center;
         }
+        .sections{
+            margin-bottom: 20px;
+        }
+
+         .select-setor.complete {
+            background-color: #4CAF50; /* Green */
+        }
+
+        .select-setor.actived {
+            border-bottom: 5px solid #bd2a2a; /* Green */
+        }
     </style>
 </head>
 <body>
     
     <h3>Separação de produtos</h3>
 
-    <div class="row">
-        <button class="select-setor">BEBIDAS</button>
-        <button class="select-setor">GRÃOS</button>
-        <button class="select-setor">ENLATADOS</button>
-        <button class="select-setor actived">FRIOS</button>
+    <div class="row sections">
+        <button onclick="selecteSector('bebidas')" class="select-setor" id="bebidas" >BEBIDAS</button>
+        <button onclick="selecteSector('graos')" class="select-setor" id="graos" >GRÃOS</button>
+        <button onclick="selecteSector('enlatados')" class="select-setor" id="enlatados">ENLATADOS</button>
+        <button onclick="selecteSector('frios')" class="select-setor actived" id="frios">FRIOS</button>
     </div>
     <div class="content">
         <table>
@@ -195,45 +200,63 @@
         </div>
     <script>
         const mockProdutos = [
-            { produto: "CAMARAO 32KG", um: "KG", qntd: 4 },
-            { produto: "CAMARAO 61/70 PUD", um: "KG", qntd: 4 },
-            { produto: "CAMARAO 32KG", um: "KG", qntd: 4 },
+            { id: 1, produto: "CAMARAO 32KG", um: "KG", qntd: 4 , sector: "frios", checked: false },
+            { id: 2, produto: "CAMARAO 16/20 PUD", um: "KG", qntd: 4, sector: "frios", checked: false },
+            { id: 3, produto: "CAMARAO 21/25 PUD", um: "KG", qntd: 4, sector: "frios", checked: false },
+            { id: 4, produto: "CAMARAO 26/30 PUD", um: "KG", qntd: 4, sector: "frios", checked: false },
+            { id: 5, produto: "CAMARAO 31/35 PUD", um: "KG", qntd: 4, sector: "frios", checked: false },
+            { id: 6, produto: "Cola cola 2L", um: "KG", qntd: 4, sector: "bebidas", checked: false },
+            { id: 7, produto: "Fanta Laranja 2L", um: "KG", qntd: 4, sector: "bebidas", checked: false },
+            { id: 8, produto: "Guaraná Antártica 2L", um: "KG", qntd: 4, sector: "bebidas", checked: false },
+            { id: 9, produto: "Cerveja Skol 350ml", um: "KG", qntd: 4, sector: "bebidas", checked: false },
+            { id: 10, produto: "Feijão Preto 1kg", um: "KG", qntd: 4, sector: "graos", checked: false },
+            { id: 11, produto: "Arroz Branco 5kg", um: "KG", qntd: 4, sector: "graos", checked: false },
+            { id: 12, produto: "Milho Verde Enlatado", um: "KG", qntd: 4, sector: "enlatados", checked: false },
+            { id: 13, produto: "Sardinha em Óleo", um: "KG", qntd: 4, sector: "enlatados", checked: false },
+            { id: 14, produto: "Feijão Preto 1kg", um: "KG", qntd: 4, sector: "graos", checked: false },
+            { id: 15, produto: "Arroz Branco 5kg", um: "KG", qntd: 4, sector: "graos", checked: false },
+            { id: 16, produto: "Milho Verde Enlatado", um: "KG", qntd: 4, sector: "enlatados", checked: false },
+            { id: 17, produto: "Sardinha em Óleo", um: "KG", qntd: 4, sector: "enlatados", checked: false }
         ];
         const tableBody = document.querySelector("table tbody");
-        document.querySelectorAll(".select-setor").forEach(button => {
-            button.addEventListener("click", event => {
-                console.log("Setor selecionado");
-
-                // Remove a classe de todos
+        
+        selecteSector = (sector) => {
                 document.querySelectorAll(".select-setor").forEach(btn => {
                     btn.classList.remove("actived");
                 });
 
-                // Adiciona apenas no clicado
-                event.currentTarget.classList.add("actived");
-            });
-        });
-        let counter = 0
-        mockProdutos.forEach(item => {
-            const row = document.createElement("tr");
-            row.id = `row-${counter}`; // Assign a unique ID to each row for future reference
-            row.attributes
-            row.innerHTML = `
-                <td id='produto-${counter}'>${item.produto}</td>
-                <td>${item.um}</td>
-                <td id='qtd-${counter}'>${item.qntd}</td>
-                <td><input type="number" min="0" id='qtd-disponivel-${counter}'></td>
-                <td> 
-                    <div class="div-buttons">
-                        <button onclick= "yes(${counter})" class="conferir-bt">SIM</button> 
-                        <button onclick = "noProduct(${counter})" class="conferir-bt no" id="button-no">NÃO</button>
-                    </div>
-                </td>
-            `;
-            tableBody.appendChild(row);
+                document.getElementById(sector).classList.add("actived");
 
-            counter++;
-        });
+            const table = document.querySelector("table");
+            table.innerHTML = `
+                <tr>
+                    <th>PRODUTO</th>
+                    <th>U.M</th>
+                    <th>QTD</th>
+                    <th>QTD DISPONIVEL</th>
+                    <th>CONFERIR</th>    
+                </tr>
+            `;
+
+            mockProdutos.forEach(item => {
+                if (item.sector === sector) {
+                    const row = document.createElement("tr");
+                    row.id = `produto-${item.id}`;
+                    row.innerHTML = `
+                        <td>${item.produto}</td>
+                        <td>${item.um}</td>
+                        <td id="qtd-${item.id}">${item.qntd}</td>
+                        <td><input type="number" id="qtd-disponivel-${item.id}" min="0" ></td>
+                        <td>
+                            <button class="conferir-bt no" onclick="noProduct(${item.id})">NÃO</button>
+                            <button class="conferir-bt" onclick="yes(${item.id})">SIM</button>
+                        </td>
+                    `;
+                    table.appendChild(row);
+                }
+            });
+        }
+        selecteSector('bebidas')
         
         const modal = document.getElementById("myModal");
         const closeBtn = document.getElementById("close-bt");
@@ -248,9 +271,35 @@
         yes = (counter) => {
             const qtdDisponivel = document.getElementById(`qtd-disponivel-${counter}`);
             const qntd = document.getElementById(`qtd-${counter}`);
-            qtdDisponivel.value = qntd.innerHTML;
+
+            if (qtdDisponivel.value === "") {
+                qtdDisponivel.value = qntd.innerHTML;
+            }
+            
             const produto = document.getElementById(`produto-${counter}`);
             produto.style.borderLeft = "4px solid #60ca80"; // Change border color to green
+
+            console.log(mockProdutos)
+            mockProdutos.find(produto => produto.id === counter).checked = true;
+
+
+            
+            
+            const selectSetor = document.querySelectorAll(".select-setor")
+            console.log(selectSetor)
+            if(selectSetor){
+                selectSetor.forEach(button => {
+                const allChecked = mockProdutos.filter(item => item.sector === button.id).every(item => item.checked);
+                console.log(allChecked)
+                if (allChecked) {
+                    button.classList.add("complete");
+                } else {
+                    button.classList.remove("complete");
+                }
+                
+            });
+            }
+            console.log(mockProdutos)
         }
 
         closeBtn.onclick = function() {
