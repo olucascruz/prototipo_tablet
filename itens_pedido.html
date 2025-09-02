@@ -373,7 +373,10 @@
                 showAlert(`Observação enviada: ${obs}`)
                 selectedProduct(actualProductObs)
                 const qtdDisponivel = document.getElementById(`qtd-disponivel-${actualProductObs}`);
-                qtdDisponivel.value = 0;
+                if (qtdDisponivel.value == '')
+                {
+                    qtdDisponivel.value = 0;
+                }
                 
                 closeObs();
             } else {
